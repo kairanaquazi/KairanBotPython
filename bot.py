@@ -20,11 +20,11 @@ async def on_message(message):
     except KeyError:
         print("Creating BannedWords for {0}".format(server.id))
         bannedWords[server.id] = []
-    checksandbalances=0
+    che = 0
     for i in bannedWords[server.id]:
         if i in message.content:
-            checksandbalances=1
-    if user.id != 589967187457081365 and not("removeBannedWord" in message.content) and bannedWords != [] and checksandbalances == 1:
+            che = 1
+    if user.id != 589967187457081365 and not("removeBannedWord" in message.content) and bannedWords != [] and che == 1:
         await message.delete()
     if message.content[0:2] == "k!":
         cmd = message.content[2:len(message.content)].split(" ")[0]
@@ -35,7 +35,15 @@ async def on_message(message):
                 msg += i+" "
             await channel.send(msg)
         elif cmd == "addBannedWord":
-            print(user.guild_permissions)
-
+            if user.guild_permissions.manage_messages:
+                for i in args:
+                    bannedWords[server.id].append(i)
+        elif cmd == "removeBannedWord":
+            if user.guild_permissions.manage_messages:
+                for i in args:
+                    bannedWords[server.id].remove(i)
+        elif cmd == "clearBannedWords":
+            if user.guild_permissions.manage_messages:
+                bannedWords[server.id] = []
 
 client.run(token)
