@@ -81,8 +81,8 @@ class KairanBot(Bot):
     async def on_message(self, msg: discord.Message):
         if not self.is_ready() or msg.author.bot:
             return
-        if msg.author.id in options.blacked:
-            return
+        '''if msg.author.id in options.blacked:
+            return'''
 
         ctx = await self.get_context(msg)
         try:
@@ -93,7 +93,7 @@ class KairanBot(Bot):
             print(e)
 
 
-games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys"]
+games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan"]
 game = random.choice(games)+" | k!help"
 client = KairanBot(prefix=when_mentioned_or('!' if 'prefix' not in options else options['prefix']),
                    pm_help=True if 'pm_help' not in options else options['pm_help'],
