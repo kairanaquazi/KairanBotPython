@@ -93,8 +93,8 @@ class KairanBot(Bot):
             print(e)
 
 
-games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan"]
-game = random.choice(games)+" | k!help"
+games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "with your feces"]
+game = random.choice(games)+""
 client = KairanBot(prefix=when_mentioned_or('!' if 'prefix' not in options else options['prefix']),
                    pm_help=True if 'pm_help' not in options else options['pm_help'],
                    activity=discord.Game('nothing. Serving Ioun.' if 'game' not in options else game),
