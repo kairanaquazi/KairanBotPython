@@ -4,6 +4,7 @@ from jishaku.help_command import DefaultPaginatorHelp
 import json
 import os
 import random
+import asyncio
 
 TOKEN = open("token.txt", "r").read()
 client = discord.Client()
@@ -11,7 +12,7 @@ bannedWords = {}
 with open("options.json") as f:
     options = json.loads(f.read())
 
-''''@client.event
+'''@client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
     game = discord.Game("with a kitten | Prefix is currently k!")
@@ -79,12 +80,9 @@ class KairanBot(Bot):
         super().__init__(prefix, *args, **kwargs)
 
     async def on_message(self, msg: discord.Message):
-        if not self.is_ready() or msg.author.bot:
-            return
-        '''if msg.author.id in options.blacked:
-            return'''
-
         ctx = await self.get_context(msg)
+        if msg.author.id in options["Blacked"] and "k!" in msg:
+            await ctx.send("Banned lol")
         try:
             await self.process_commands(msg)
             if 'delete_orig' in options and options['delete_orig'] and isinstance(ctx, Context) and ctx.valid:
@@ -92,9 +90,12 @@ class KairanBot(Bot):
         except BaseException as e:
             print(e)
 
+    async def on_command_error(self, ctx, error):
+        await ctx.send(error)
 
-games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "with your feces"]
-game = random.choice(games)+""
+
+games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "Kill the Fascists"]
+game = random.choice(games)+" | k!help"
 client = KairanBot(prefix=when_mentioned_or('!' if 'prefix' not in options else options['prefix']),
                    pm_help=True if 'pm_help' not in options else options['pm_help'],
                    activity=discord.Game('nothing. Serving Ioun.' if 'game' not in options else game),
@@ -106,10 +107,11 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
+    print("Playing: {}".format(game))
     print('------')
 
 for file in os.listdir("cogs"):
-    if file.endswith(".py"):
+    if file.endswith(".py") and not(file in options["disabledCogs"]):
         name = file[:-3]
         client.load_extension(f"cogs.{name}")
         print(name)

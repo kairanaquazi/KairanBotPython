@@ -4,5 +4,6 @@
   "game": "Fortnite | Prefix is currently k!",
   "pm_help": 1,
   "censor": 0,
-  "Blacked": [""]
+  "Blacked": [],
+  "disabledCogs":["economy.py"]
 }
