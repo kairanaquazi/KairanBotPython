@@ -1,3 +1,4 @@
 praw.ini
 cogs/bannedwords
 hooks.txt
+token.txt
