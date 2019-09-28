@@ -191,7 +191,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.webhookclear">
+  <component name="RunManager" selected="Python.bot">
     <configuration name="bot" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="KairanBot" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -278,9 +278,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.bot" />
         <item itemvalue="Python.webhookclear" />
         <item itemvalue="Python.webhookupdater" />
-        <item itemvalue="Python.bot" />
         <item itemvalue="Python.reddit" />
       </list>
     </recent_temporary>
