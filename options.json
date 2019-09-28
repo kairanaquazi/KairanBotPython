@@ -5,5 +5,5 @@
   "pm_help": 1,
   "censor": 0,
   "Blacked": [],
-  "disabledCogs":["economy.py"]
+  "disabledCogs":[]
 }
