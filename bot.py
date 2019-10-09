@@ -5,6 +5,7 @@ import json
 import os
 import random
 import asyncio
+import aiohttp
 
 TOKEN = open("token.txt", "r").read()
 client = discord.Client()
@@ -78,6 +79,13 @@ client.run(token)'''
 class KairanBot(Bot):
     def __init__(self, *args, prefix=None, **kwargs):
         super().__init__(prefix, *args, **kwargs)
+        self.http2 = None
+        self.bg_task = self.loop.create_task(self.playingstatus())
+        self.reddit_task = self.loop.create_task(self.redditupdate())
+        self.change_status = True
+        self.games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "Kill the Fascists"]
+        if not self.http2:
+            self.http2 = aiohttp.ClientSession()
 
     async def on_message(self, msg: discord.Message):
         ctx = await self.get_context(msg)
@@ -90,12 +98,51 @@ class KairanBot(Bot):
         except BaseException as e:
             print(e)
 
+    async def logout(self):
+        if not self.http2.closed:
+            await self.http2.close()
+            await asyncio.sleep(0)
+
+        await super().logout()
+
     async def on_command_error(self, ctx, error):
         await ctx.send(error)
+        if error == CommandNotFound:
+            return
+        await ctx.send(await self.post_to_hastebin(str(error)))
+
+    async def post_to_hastebin(self, data):
+        data = data.encode("utf-8")
+        async with self.http2.post("https://hastebin.com/documents", data=data) as resp:
+            out = await resp.json()
+
+        assert "key" in out
+
+        return "https://hastebin.com/" + out["key"]
+
+    async def playingstatus(self):
+
+        await self.wait_until_ready()
+        while self.is_ready() and self.change_status:
+            status = random.choice(self.games)
+            status += f" | Hiding in {len(self.guilds)} servers and spying on {len(self.users)} users..."
+
+            await self.change_presence(activity=discord.Game(name=status), status=discord.Status.idle)
+            await asyncio.sleep(120)
+
+    async def redditupdate(self):
+
+        await self.wait_until_ready()
+        while self.is_ready() and self.change_status:
+            status = random.choice(self.games)
+            status += f" | Hiding in {len(self.guilds)} servers and spying on {len(self.users)} users..."
+
+            await self.change_presence(activity=discord.Game(name=status), status=discord.Status.idle)
+            await asyncio.sleep(120)
 
 
 games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "Kill the Fascists"]
-game = random.choice(games)+" | k!help"
+game = "Fortnite"+" | k!help"
 client = KairanBot(prefix=when_mentioned_or('!' if 'prefix' not in options else options['prefix']),
                    pm_help=True if 'pm_help' not in options else options['pm_help'],
                    activity=discord.Game('nothing. Serving Ioun.' if 'game' not in options else game),

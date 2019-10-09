@@ -24,6 +24,6 @@ for url in open("hooks.txt", "r"):
     except requests.exceptions.HTTPError as err:
         print(err)
     else:
-        print("Payload delivered successfully, code {}.".format(result.status_code))
+        print("Payload delivered successfully to {1}, code {0}.".format(result.status_code, url))
 
 # result: https://i.imgur.com/DRqXQzA.png
