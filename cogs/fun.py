@@ -62,6 +62,22 @@ class Fun(commands.Cog):
         await ctx.send("Done")
         return
 
+    @commands.command(aliases=["invite"])
+    async def link(self, ctx):
+        await ctx.send(self.bot.invite)
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member):
+        channel = member.guild.system_channel
+        if channel is not None:
+            await channel.send('Welcome {0.mention}.'.format(member))
+        if member.bot and member.guild.id == 554826709082570760:
+            role = discord.utils.get(member.guild.roles, name="BOT")
+            await member.add_roles(role)
+        role = None
+        role - discord.utils.get(member.guild.roles, name="Fans")
+        await member.add_roles(role)
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))

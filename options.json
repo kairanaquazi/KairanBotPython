@@ -5,5 +5,9 @@
   "pm_help": 1,
   "censor": 0,
   "Blacked": [],
-  "disabledCogs":[]
+  "disabledCogs":[],
+  "length": 1,
+  "repeatreddit": 0,
+  "hastebin": 1,
+  "logging": 0
 }

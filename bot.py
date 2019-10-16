@@ -2,16 +2,30 @@ import discord
 from discord.ext.commands import *
 from jishaku.help_command import DefaultPaginatorHelp
 import json
+import yaml
 import os
 import random
 import asyncio
 import aiohttp
-
-TOKEN = open("token.txt", "r").read()
+import praw
+import logging
+import datetime
+print(discord.__version__)
+with open("token.txt", "r") as f:
+    TOKEN = f.read()
 client = discord.Client()
 bannedWords = {}
 with open("options.json") as f:
     options = json.loads(f.read())
+with open("censor.yaml") as f:
+    opyaml = yaml.load(f.read(), Loader=yaml.SafeLoader)
+if options["logging"]:
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
+
 
 '''@client.event
 async def on_ready():
@@ -84,8 +98,26 @@ class KairanBot(Bot):
         self.reddit_task = self.loop.create_task(self.redditupdate())
         self.change_status = True
         self.games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "Kill the Fascists"]
+        self.reddit = praw.Reddit('bot1')
+        self.subreddit = self.reddit.subreddit("dankmemes")
+        open("lastred.txt", "a").close()
+        with open("lastred.txt", "r") as fo:
+            self.lastsent = "".join(fo.readlines())
+        if options["repeatreddit"]:
+            self.lastsent = 0
+        self.invite = 0
         if not self.http2:
             self.http2 = aiohttp.ClientSession()
+
+    async def on_ready(self):
+        self.invite = discord.utils.oauth_url(self.user.id, discord.Permissions(permissions=8))
+        print('Logged in as')
+        print(client.user.name)
+        print(client.user.id)
+        print("Playing: {}".format(game))
+        print(datetime.datetime.now())
+        print("OAuth link: ", self.invite)
+        print('------')
 
     async def on_message(self, msg: discord.Message):
         ctx = await self.get_context(msg)
@@ -102,23 +134,14 @@ class KairanBot(Bot):
         if not self.http2.closed:
             await self.http2.close()
             await asyncio.sleep(0)
-
+        with open("lastred.txt", "w") as fooo:
+            fooo.write(str(self.lastsent))
         await super().logout()
 
     async def on_command_error(self, ctx, error):
         await ctx.send(error)
         if error == CommandNotFound:
             return
-        await ctx.send(await self.post_to_hastebin(str(error)))
-
-    async def post_to_hastebin(self, data):
-        data = data.encode("utf-8")
-        async with self.http2.post("https://hastebin.com/documents", data=data) as resp:
-            out = await resp.json()
-
-        assert "key" in out
-
-        return "https://hastebin.com/" + out["key"]
 
     async def playingstatus(self):
 
@@ -126,18 +149,34 @@ class KairanBot(Bot):
         while self.is_ready() and self.change_status:
             status = random.choice(self.games)
             status += f" | Hiding in {len(self.guilds)} servers and spying on {len(self.users)} users..."
-
-            await self.change_presence(activity=discord.Game(name=status), status=discord.Status.idle)
+            await self.change_presence(activity=discord.Game(name=status), status=discord.Status.online)
             await asyncio.sleep(120)
 
     async def redditupdate(self):
 
         await self.wait_until_ready()
+        print("Started")
+        sendchannel = ""
+        for i in self.guilds[1].channels:
+            if i.id == 631635939558424596:
+                sendchannel = i
+                break
+        self.lastsent = 0
         while self.is_ready() and self.change_status:
-            status = random.choice(self.games)
-            status += f" | Hiding in {len(self.guilds)} servers and spying on {len(self.users)} users..."
-
-            await self.change_presence(activity=discord.Game(name=status), status=discord.Status.idle)
+            # self.subreddit.hot(limit=options["length"])
+            print("Y")
+            for i in self.subreddit.hot(limit=options["length"]):
+                newtitle = i.title
+                for curse in opyaml["censor"]:
+                    newtitle = newtitle.replace(curse, opyaml["censor"][curse])
+                # Resume here
+                if i.url != self.lastsent:
+                    await sendchannel.send(newtitle + "\n" + i.url + "\n\n\n")
+                    self.lastsent = i.url
+                    with open("lastred.txt", "w") as foo:
+                        foo.write(self.lastsent)
+                else:
+                    pass
             await asyncio.sleep(120)
 
 
@@ -149,13 +188,14 @@ client = KairanBot(prefix=when_mentioned_or('!' if 'prefix' not in options else 
                    help_command=DefaultPaginatorHelp())
 
 
-@client.event
+'''@client.event
 async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print("Playing: {}".format(game))
-    print('------')
+    print(datetime.datetime.now())
+    print('------')'''
 
 for file in os.listdir("cogs"):
     if file.endswith(".py") and not(file in options["disabledCogs"]):
@@ -166,4 +206,3 @@ for file in os.listdir("cogs"):
 client.load_extension("jishaku")
 
 client.run(TOKEN)
-
