@@ -8,6 +8,7 @@
   "disabledCogs":[],
   "length": 1,
   "repeatreddit": 0,
-  "hastebin": 1,
-  "logging": 0
+  "haste": 0,
+  "logging": 0,
+  "restart": 1
 }

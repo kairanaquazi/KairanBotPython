@@ -11,7 +11,7 @@ class Fun(commands.Cog):
 
     @commands.command(description="Try k!echo k!echo k!echo ... echo")
     async def echo(self, ctx, *, echo: str):
-        if echo == "echo":
+        if echo == "k!echo":
             return
         await ctx.send(echo)
 

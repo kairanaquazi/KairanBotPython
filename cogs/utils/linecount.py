@@ -22,3 +22,4 @@ def linecount():
 
     return f"I am made of {total:,} lines of Python, spread across {file_amount:,} files! That's an average of about" \
         f" {avg:,} lines per file."
+linecount()

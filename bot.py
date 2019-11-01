@@ -8,8 +8,8 @@ import random
 import asyncio
 import aiohttp
 import praw
-import logging
 import datetime
+import requests
 print(discord.__version__)
 with open("token.txt", "r") as f:
     TOKEN = f.read()
@@ -19,12 +19,6 @@ with open("options.json") as f:
     options = json.loads(f.read())
 with open("censor.yaml") as f:
     opyaml = yaml.load(f.read(), Loader=yaml.SafeLoader)
-if options["logging"]:
-    logger = logging.getLogger('discord')
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)
 
 
 '''@client.event
@@ -108,6 +102,7 @@ class KairanBot(Bot):
         self.invite = 0
         if not self.http2:
             self.http2 = aiohttp.ClientSession()
+        self.restart = datetime.datetime.now()
 
     async def on_ready(self):
         self.invite = discord.utils.oauth_url(self.user.id, discord.Permissions(permissions=8))
@@ -115,7 +110,8 @@ class KairanBot(Bot):
         print(client.user.name)
         print(client.user.id)
         print("Playing: {}".format(game))
-        print(datetime.datetime.now())
+        self.restart = datetime.datetime.now()
+        print(self.restart)
         print("OAuth link: ", self.invite)
         print('------')
 
@@ -141,14 +137,35 @@ class KairanBot(Bot):
     async def on_command_error(self, ctx, error):
         await ctx.send(error)
         if error == CommandNotFound:
-            return
+            pass
+        key = await self.post_to_hastebin(str(error))
+        print(key)
+        await ctx.send(key)
+
+    async def post_to_hastebin(self, data):
+        data = data.encode("utf-8")
+        site = "http://hastebin.com"
+        if not options["haste"]:
+            site = "http://localhost:7777"
+        async with self.http2.post(site+"/documents", data=data) as resp:
+            out = await resp.json()
+
+        assert "key" in out
+
+        '''print("Requesting Haste")
+        response = requests.post('http://hastebin.com/documents', data="hello")
+        if response.status_code == 200:
+            print(response.json()['key'])
+        print(response.status_code)'''
+        return f"{site}/" + out["key"]
 
     async def playingstatus(self):
 
         await self.wait_until_ready()
         while self.is_ready() and self.change_status:
             status = random.choice(self.games)
-            status += f" | Hiding in {len(self.guilds)} servers and spying on {len(self.users)} users..."
+            status += f" | Hiding in {len(self.guilds)} servers and spying on {len(self.users)} users... "
+            status += f"last restarted at {self.restart.strftime('%d-%b-%Y (%H:%M:%S)')}"
             await self.change_presence(activity=discord.Game(name=status), status=discord.Status.online)
             await asyncio.sleep(120)
 
@@ -182,7 +199,8 @@ class KairanBot(Bot):
 
 games = ["Fortnite", "with a kitten", "Secret Hitler", "with toys", "with Kairan", "Kill the Fascists"]
 game = "Fortnite"+" | k!help"
-client = KairanBot(prefix=when_mentioned_or('!' if 'prefix' not in options else options['prefix']),
+print(when_mentioned_or("k!"))
+client = KairanBot(prefix=when_mentioned_or("k!"),
                    pm_help=True if 'pm_help' not in options else options['pm_help'],
                    activity=discord.Game('nothing. Serving Ioun.' if 'game' not in options else game),
                    help_command=DefaultPaginatorHelp())
@@ -205,4 +223,10 @@ for file in os.listdir("cogs"):
 
 client.load_extension("jishaku")
 
-client.run(TOKEN)
+while options["restart"]:
+    with open("options.json") as f:
+        options = json.loads(f.read())
+    print("Loaded new settings")
+    client.run(TOKEN)
+    print("Restarting")
+
