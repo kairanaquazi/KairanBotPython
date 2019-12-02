@@ -10,6 +10,9 @@ import aiohttp
 import praw
 import datetime
 import requests
+import threading
+import keep_alive
+from locallog.scripts.logger import Logger, MimicLogger
 print(discord.__version__)
 with open("token.txt", "r") as f:
     TOKEN = f.read()
@@ -20,6 +23,10 @@ with open("options.json") as f:
 with open("censor.yaml") as f:
     opyaml = yaml.load(f.read(), Loader=yaml.SafeLoader)
 
+logger = MimicLogger()
+if options["logging"]:
+    del logger
+    logger = Logger()
 
 '''@client.event
 async def on_ready():
@@ -132,21 +139,27 @@ class KairanBot(Bot):
             await asyncio.sleep(0)
         with open("lastred.txt", "w") as fooo:
             fooo.write(str(self.lastsent))
+        logger.close()
         await super().logout()
 
     async def on_command_error(self, ctx, error):
         await ctx.send(error)
+        logger.log("ERROR", "Command: "+ctx.message.content+" by "+ctx.message.author.name+" failed")
         if error == CommandNotFound:
             pass
         key = await self.post_to_hastebin(str(error))
         print(key)
+        if key == "":
+            return
         await ctx.send(key)
 
     async def post_to_hastebin(self, data):
         data = data.encode("utf-8")
         site = "http://hastebin.com"
+        if options["haste"] == 2:
+            return ""
         if not options["haste"]:
-            site = "http://localhost:7777"
+            site = "http://localhost"
         async with self.http2.post(site+"/documents", data=data) as resp:
             out = await resp.json()
 
@@ -158,6 +171,10 @@ class KairanBot(Bot):
             print(response.json()['key'])
         print(response.status_code)'''
         return f"{site}/" + out["key"]
+
+    async def process_commands(self, message):
+        logger.log("INFO", "Command used")
+        await super().process_commands(message)
 
     async def playingstatus(self):
 
@@ -222,7 +239,7 @@ for file in os.listdir("cogs"):
         print(name)
 
 client.load_extension("jishaku")
-
+keep_alive.keep_alive()
 while options["restart"]:
     with open("options.json") as f:
         options = json.loads(f.read())

@@ -14,18 +14,13 @@ async def on_ready():
 
 @client.command(pass_context=True)
 async def join(ctx):
-    global voice
-    channel = ctx.message.author.voice.channel
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        try:
-            voice = await channel.connect()
-        except:
-            await voice.move_to(channel)
-    await ctx.send(f"Joined {channel}")
+    vc = await ctx.author.voice.channel.connect()
+    vc.play(discord.FFmpegPCMAudio('testing.mp3'), after=lambda e: print('done', e))
+    vc.is_playing()
+    vc.pause()
+    vc.resume()
+    vc.stop()
+    await ctx.send(f"Joined")
 
 
 @client.command(pass_context=True)

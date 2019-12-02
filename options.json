@@ -8,7 +8,8 @@
   "disabledCogs":[],
   "length": 1,
   "repeatreddit": 0,
-  "haste": 0,
-  "logging": 0,
+  "haste": 2,
+  "logging": 1,
+  "cmdcontrol": 1,
   "restart": 1
 }

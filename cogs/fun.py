@@ -41,6 +41,8 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def umm(self, ctx, *name: str):
+        if ctx.message.author.id != self.bot.owner.user.id:
+            return
         n = name
         name = ""
         for i in n:
