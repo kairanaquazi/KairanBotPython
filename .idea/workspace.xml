@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="caae6f32-f43b-42a2-b461-9a90d8737aeb" name="Default Changelist" comment="" />
+    <list default="true" id="caae6f32-f43b-42a2-b461-9a90d8737aeb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/locallog/logs/latest.log" beforeDir="false" afterPath="$PROJECT_DIR$/locallog/logs/latest.log" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,6 +206,7 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.ini" />
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.md" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
