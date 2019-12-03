@@ -1,5 +1,5 @@
 # KairanBotPython
-<pre><code>1. pip install discord.py
+<pre><code>1. pip install -r requirements.txt
 2. git clone <a href="https://www.github.com/kairanaquazi/KairanbotPython.git">https://www.github.com/kairanaquazi/KairanbotPython.git</a> master
 3. cd KairanBotPython
 </pre></code>
@@ -12,3 +12,5 @@ tools, delete the Reddit command in socialandstuff.py</strong>
 </pre></code>
 You may also have to remove some of my guild specific code to make sure you don't get
 errors.
+<br>
+Feel free to file issues (please don't email me unless it is an urgent issue, eg. Data leak)
