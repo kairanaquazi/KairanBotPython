@@ -4,7 +4,7 @@
 3. cd KairanBotPython
 </pre></code>
 <strong>Add your bot token into token.txt</strong><br>
-<strong>Create a praw.ini file based off the template in prawtemp.ini.
+<strong>Edit the praw.ini file.
 Add your Reddit's bot id, secret and name. If you don't want to do Reddit
 tools, delete the Reddit command in socialandstuff.py</strong>
 <pre><code>
