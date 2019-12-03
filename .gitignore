@@ -1,6 +1,6 @@
 cogs/bannedwords
 hooks.txt
-token.txt
 lastred.txt
 discord.log
-prawold.ini
+praw.ini
+prawtemp.ini
