@@ -235,7 +235,10 @@ async def on_ready():
 for file in os.listdir("cogs"):
     if file.endswith(".py") and not(file in options["disabledCogs"]):
         name = file[:-3]
-        client.load_extension(f"cogs.{name}")
+        try:
+            client.load_extension(f"cogs.{name}")
+        except:
+            print(f"Failed to load cogs.{name}")
         print(name)
 
 client.load_extension("jishaku")
