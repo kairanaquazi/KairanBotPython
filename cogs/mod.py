@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import asyncio
+import asyncio,json
 
 permerrortext = "You do not have sufficient permissions to execute this command"
 permerrortext += ", if you believe this is in error, please contact either thepronoobkq#3751 (owner of the bot) by "
@@ -117,8 +117,21 @@ class ModerationTools(commands.Cog):
             await asyncio.sleep(0.5)
 
     @commands.command()
-    async def  mailmod(self, ctx, anon, *, text):
-        pass
+    async def mailmod(self, ctx, type, *, text):
+        channel = ctx.channel
+        message = ctx.message
+        message.delete()
+        with open("modsoptions.json") as f:
+            mods = json.loads(f.read())
+        guild = ctx.author.guild
+        mods = mods[guild.id]
+        for mod in mods:
+            curmod = guild.get_member(mod)
+            if curmod.dm_channel == None:
+                await curmod.create_dm()
+            dmchan = curmod.dm_channel
+            msg=f'''{ctx.author.display_name} has filed a mod report that states:\ntext\n please DM the other mods and pick who takes the report.'''
+            dmchan.send(msg)
 
 
 def setup(bot):
