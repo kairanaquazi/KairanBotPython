@@ -14,8 +14,8 @@ import threading
 import keep_alive
 from locallog.scripts.logger import Logger, MimicLogger
 print(discord.__version__)
-with open("token.txt", "r") as f:
-    TOKEN = f.read()
+with open(".env", "r") as f:
+    TOKEN = f.read().replace("TOKEN=", "")
 client = discord.Client()
 bannedWords = {}
 with open("options.json") as f:

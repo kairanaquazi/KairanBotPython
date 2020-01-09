@@ -4,5 +4,5 @@ lastred.txt
 discord.log
 praw.ini
 prawtemp.ini
-token.txt
+.env
 mods.json
