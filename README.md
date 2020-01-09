@@ -3,7 +3,7 @@
 2. git clone <a href="https://www.github.com/kairanaquazi/KairanbotPython.git">https://www.github.com/kairanaquazi/KairanbotPython.git</a> master
 3. cd KairanBotPython
 </pre></code>
-<strong>Add your bot token into token.txt</strong><br>
+<strong>Add your bot token into .env (TOKEN=[your token])</strong><br>
 <strong>Edit the praw.ini file.
 Add your Reddit's bot id, secret and name. If you don't want to do Reddit
 tools, delete the Reddit command in socialandstuff.py</strong>
