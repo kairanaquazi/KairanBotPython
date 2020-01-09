@@ -133,6 +133,11 @@ class KairanBot(Bot):
         except BaseException as e:
             print(e)
 
+    async def on_member_ban(self, guild, user):
+        print(f"By golly, {user.name} go banned!!!!")
+        if guild.id == 554826709082570760:  # insert your guild (or remove this if you dont want a custom message)
+            await guild.get_channel(554826709510258698).send(f"By golly, {user.name} was banned!\nF in the chat :(")
+
     async def logout(self):
         if not self.http2.closed:
             await self.http2.close()
@@ -243,10 +248,6 @@ for file in os.listdir("cogs"):
 
 client.load_extension("jishaku")
 keep_alive.keep_alive()
-while options["restart"]:
-    with open("options.json") as f:
-        options = json.loads(f.read())
-    print("Loaded new settings")
-    client.run(TOKEN)
-    print("Restarting")
+hm = 0
+client.run(TOKEN)
 

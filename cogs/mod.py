@@ -1,5 +1,10 @@
 import discord
 from discord.ext import commands
+import asyncio
+
+permerrortext = "You do not have sufficient permissions to execute this command"
+permerrortext += ", if you believe this is in error, please contact either thepronoobkq#3751 (owner of the bot) by "
+permerrortext += "DM, or contact a server admin or owner (to get you perms)"
 
 
 def canban(ctx, member: discord.Member):
@@ -69,37 +74,51 @@ class ModerationTools(commands.Cog):
         await ctx.send(open(f"cogs/bannedwords/{ctx.guild.id}.txt", "r").readlines())
 
     @commands.command()
-    async def ban(self, ctx, member: discord.Member, reason=""):
+    async def ban(self, ctx, member: discord.Member, *, reason=""):
         author = ctx.author
         if canban(ctx, author):
             await member.ban(reason=reason)
+            await ctx.send("Banned")
         else:
-            text = "You do not have sufficient permissions to execute this command"
-            text += ", if you believe this is in error, please contact either thepronoobkq#3751 (owner of the bot) by "
-            text += "DM, or contact a server admin or owner (to get you perms)"
-            await ctx.send(text)
+            await ctx.send(permerrortext)
 
     @commands.command()
-    async def unban(self, ctx, member: discord.Member, reason=""):
+    async def unban(self, ctx, member: discord.User, *, reason=""):
         author = ctx.author
         if canban(ctx, author):
-            await member.unban(reason=reason)
+            await ctx.guild.unban(member, reason=reason)
+            await ctx.send("Unbanned")
         else:
-            text = "You do not have sufficient permissions to execute this command"
-            text += ", if you believe this is in error, please contact either thepronoobkq#3751 (owner of the bot) by "
-            text += "DM, or contact a server admin or owner (to get you perms)"
-            await ctx.send(text)
+            await ctx.send(permerrortext)
 
     @commands.command()
-    async def kick(self, ctx, member: discord.Member, reason=""):
+    async def kick(self, ctx, member: discord.Member, *, reason=""):
         author = ctx.author
         if cankick(ctx, author):
             await member.kick(reason=reason)
+            await ctx.send("Kicked")
         else:
-            text = "You do not have sufficient permissions to execute this command"
-            text += ", if you believe this is in error, please contact either thepronoobkq#3751 by "
-            text += "DM, or contact a server admin or owner"
-            await ctx.send(text)
+            await ctx.send(permerrortext)
+
+    @commands.command()
+    async def softban(self, ctx, member: discord.Member, *, reason=""):
+        author = ctx.author
+        if canban(ctx, author):
+            await member.ban(reason=reason)
+            await member.unban(reason=reason)
+            await ctx.send("Softbanned")
+        else:
+            await ctx.send(permerrortext)
+
+    @commands.command()
+    async def bans(self, ctx, limit=10):  # mainly a debug tool for finding who a "deleted user" is
+        async for entry in ctx.guild.audit_logs(action=discord.AuditLogAction.ban, limit=limit):
+            await ctx.send('{0.user} banned {0.target}'.format(entry))
+            await asyncio.sleep(0.5)
+
+    @commands.command()
+    async def  mailmod(self, ctx, anon, *, text):
+        pass
 
 
 def setup(bot):

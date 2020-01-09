@@ -73,12 +73,9 @@ class Fun(commands.Cog):
         channel = member.guild.system_channel
         if channel is not None:
             await channel.send('Welcome {0.mention}.'.format(member))
-        if member.bot and member.guild.id == 554826709082570760:
+        if member.bot and (member.guild.id == 554826709082570760 or member.guild.id == 659933426039914516):
             role = discord.utils.get(member.guild.roles, name="BOT")
             await member.add_roles(role)
-        role = None
-        role - discord.utils.get(member.guild.roles, name="Fans")
-        await member.add_roles(role)
 
 
 def setup(bot):
