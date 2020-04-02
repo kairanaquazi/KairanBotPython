@@ -2,9 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="caae6f32-f43b-42a2-b461-9a90d8737aeb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gcloudignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gcloudignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/censor.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/censor.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/fun.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/fun.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/mod.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/mod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locallog/logs/latest.log" beforeDir="false" afterPath="$PROJECT_DIR$/locallog/logs/latest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/options.json" beforeDir="false" afterPath="$PROJECT_DIR$/options.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/token.txt" beforeDir="false" afterPath="$PROJECT_DIR$/token.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,14 +28,6 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>ye</find>
-      <find>deepfr</find>
-      <find>dee</find>
-      <find>fry</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -34,7 +35,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/yeet python/scrapers/codestuff/Clone HTML" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
   <component name="RecentsManager">

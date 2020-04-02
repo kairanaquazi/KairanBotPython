@@ -6,3 +6,5 @@ praw.ini
 prawtemp.ini
 .env
 mods.json
+mutes.json
+redis.conf

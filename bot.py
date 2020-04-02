@@ -124,8 +124,21 @@ class KairanBot(Bot):
 
     async def on_message(self, msg: discord.Message):
         ctx = await self.get_context(msg)
+        open("muted.json", "a").close()
+        with open("muted.json") as ff:
+            muted = json.loads(ff.read())
+        try:
+            if msg.author.id in muted[str(ctx.guild.id)]:
+                await msg.delete()
+                return
+        except:
+            pass
         if msg.author.id in options["Blacked"] and "k!" in msg:
             await ctx.send("Banned lol")
+        if opyaml["censorship"] == 1:
+            for word in opyaml["censor"]:
+                if word in msg.content:
+                    await msg.delete()
         try:
             await self.process_commands(msg)
             if 'delete_orig' in options and options['delete_orig'] and isinstance(ctx, Context) and ctx.valid:
@@ -137,6 +150,9 @@ class KairanBot(Bot):
         print(f"By golly, {user.name} go banned!!!!")
         if guild.id == 554826709082570760:  # insert your guild (or remove this if you dont want a custom message)
             await guild.get_channel(554826709510258698).send(f"By golly, {user.name} was banned!\nF in the chat :(")
+
+    async def on_message_delete(self,message:discord.Message):
+        print(f"Ahhhh")
 
     async def logout(self):
         if not self.http2.closed:
@@ -248,6 +264,5 @@ for file in os.listdir("cogs"):
 
 client.load_extension("jishaku")
 keep_alive.keep_alive()
-hm = 0
 client.run(TOKEN)
 

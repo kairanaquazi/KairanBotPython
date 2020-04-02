@@ -11,5 +11,6 @@
   "haste": 2,
   "logging": 1,
   "cmdcontrol": 1,
-  "restart": 1
+  "restart": 1,
+  "redispassword": "trimary"
 }

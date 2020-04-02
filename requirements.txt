@@ -6,3 +6,4 @@ praw==6.4.0
 gunicorn==19.7.1
 opencv-python
 PILLOW
+redis

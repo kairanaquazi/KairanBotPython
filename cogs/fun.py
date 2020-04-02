@@ -9,12 +9,6 @@ class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(description="Try k!echo k!echo k!echo ... echo")
-    async def echo(self, ctx, *, echo: str):
-        if echo == "k!echo":
-            return
-        await ctx.send(echo)
-
     @commands.command(description="Addition")
     async def add(self, ctx, num1, num2):
         async with ctx.typing():

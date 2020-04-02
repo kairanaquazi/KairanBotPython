@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
-import asyncio,json
+import asyncio
+import json
 
 permerrortext = "You do not have sufficient permissions to execute this command"
 permerrortext += ", if you believe this is in error, please contact either thepronoobkq#3751 (owner of the bot) by "
@@ -116,22 +117,41 @@ class ModerationTools(commands.Cog):
             await ctx.send('{0.user} banned {0.target}'.format(entry))
             await asyncio.sleep(0.5)
 
-    @commands.command()
-    async def mailmod(self, ctx, type, *, text):
+    """@commands.command(aliases=["modmail","report"])
+    async def mailmod(self, ctx, title, *, text):
         channel = ctx.channel
         message = ctx.message
-        message.delete()
-        with open("modsoptions.json") as f:
+        await message.delete()
+        with open("mods.json") as f:
             mods = json.loads(f.read())
         guild = ctx.author.guild
-        mods = mods[guild.id]
+        try:
+            mods = mods[str(guild.id)]
+        except:
+            author = ctx.author
+            if author.dm_channel == None:
+                await author.create_dm()
+            dmchan = author.dm_channel
+            msg = f'''Sorry, this server does not have modmail enabled.'''
+            await dmchan.send(msg)
         for mod in mods:
             curmod = guild.get_member(mod)
             if curmod.dm_channel == None:
                 await curmod.create_dm()
             dmchan = curmod.dm_channel
-            msg=f'''{ctx.author.display_name} has filed a mod report that states:\ntext\n please DM the other mods and pick who takes the report.'''
-            dmchan.send(msg)
+            msg = f'''{ctx.author.display_name} has filed a mod report with type: {title} \nthat states:\n{text}'''
+            await dmchan.send(msg)"""
+
+    @commands.command()
+    async def purgemembers(self, ctx, reason="Purge of members"):
+        count = 0
+        if not cankick(ctx, ctx.author):
+            return
+        for member in ctx.guild.members:
+            if member.roles == [member.roles[0]]:
+                await member.kick(reason=reason + "by "+ctx.author.display_name)
+                count += 1
+        await ctx.send(f"Purged {count} members")
 
 
 def setup(bot):
